@@ -1,0 +1,8 @@
+{
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "matrix.h": "c",
+        "headers.h": "c",
+        "__locale": "c"
+    }
+}
