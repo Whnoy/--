@@ -1,0 +1,4 @@
+all: create
+
+create: 
+	gcc maindet.c testdet.c funcs.c Matrix.c -o det.out

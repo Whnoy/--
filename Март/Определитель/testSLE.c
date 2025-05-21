@@ -29,7 +29,7 @@ int testRand(FILE *output) {
             B[k] = 0;
             x[k] = 0;
             for (unsigned j = 0; j < n; j++) {
-                matrix.matrix[k][j] = randomDouble(10);
+                matrix.matrix[k][j] = randab(100);
                 B[k] += matrix.matrix[k][j];
             }
         }
@@ -45,7 +45,7 @@ int testRand(FILE *output) {
             free(matrix.matrix);
             continue;
         }
-        fprintf(output, "%dx%d: %lf, %lf, %lf\n", n, n, ((double)(end - start)) / CLOCKS_PER_SEC, compareX(x, n), compareRes(matrix.matrix, x, B, n));
+        fprintf(output, "%4dx%4d: \t%lf, \t%lf, \t%lf\n", n, n, ((double)(end - start)) / CLOCKS_PER_SEC, compareX(x, n), compareRes(matrix.matrix, x, B, n));
 
 
         for (int i = 0; i < n; i++) {

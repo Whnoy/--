@@ -1,0 +1,4 @@
+all: create
+
+create:
+	gcc mainSLE.c testSLE.c funcs.c Matrix.c -o sle.out

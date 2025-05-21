@@ -17,7 +17,7 @@ int testRand(FILE *output) {
 
         for (unsigned k = 0; k < n; k++) {
             for (unsigned j = 0; j < n; j++) {
-                matrix.matrix[k][j] = randomDouble(10);
+                matrix.matrix[k][j] = randab(100);
             }
         }
 
@@ -26,7 +26,7 @@ int testRand(FILE *output) {
         start = clock();
         det = findMatDet(matrix.matrix, matrix.rows, &matrix.acts);
         end = clock();
-        fprintf(output, "%ux%u: %lf, %Lf\n", n, n, ((double)(end - start)) / CLOCKS_PER_SEC, det);
+        fprintf(output, "%3ux%3u: %lf, %Lf\n", n, n, ((double)(end - start)) / CLOCKS_PER_SEC, det);
 
 
         for (int i = 0; i < n; i++) {

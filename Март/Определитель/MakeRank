@@ -1,0 +1,4 @@
+all: create
+
+create:
+	gcc mainRank.c testRank.c funcs.c Matrix.c -o rank.out

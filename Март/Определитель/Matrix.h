@@ -2,6 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define E(n)  EMatrix(n)
+#define EPS 1e-14
+
+
+/// Function to generate a random double
+static inline double randab(unsigned max) {return pow(-1, rand()%2)*((double)(rand() % max)) + (1/(rand()+1));}
+
 
 /// Struct to account operations
 typedef struct {
@@ -22,11 +29,17 @@ typedef struct {
 } Matrix;
 
 
-/// Function to generate a random double
-double randomDouble(double max);
-
 /// Function to create a matrix
 double **createMatrix(int n, int m);
+
+/// Function to create an identity matrix of size n
+Matrix EMatrix(unsigned n);
+
+/// Function to create a row matrix with a given elements
+Matrix createRow(unsigned n, double *dub);
+
+/// Function to create a column matrix with a given elements
+Matrix createCol(unsigned n, double *dub);
 
 /// Function to read a matrix from a file
 Matrix readMatrix(FILE *file);
@@ -34,9 +47,11 @@ Matrix readMatrix(FILE *file);
 /// Function to copy a matrix
 Matrix copyMatrix(Matrix matrix);
 
+
 /// Function to free a matrix
 int freeMatrix(double **matrix, unsigned n, unsigned m);
 
+static inline int freeSMatrix(Matrix matrix) {return freeMatrix(matrix.matrix, matrix.rows, matrix.cols);}
 
 
 /// Function to swap two rows of a matrix

@@ -1,0 +1,5 @@
+all: create
+
+create: 
+	gcc maininv.c testinv.c funcs.c Matrix.c -o inv.out
+
