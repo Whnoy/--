@@ -69,6 +69,7 @@ int sloveSLE(double **A, double *B, unsigned n, double *x) {
 
 Matrix findInv(double **A, unsigned n, MatActs *acts) {
     Matrix matrix = {createMatrix(n, 2*n), n, 2*n, (MatActs){0, 1, 1}};
+    double norm;
     for (unsigned i = 0; i < n; i++) {
         for (unsigned j = 0; j < n; j++) {
             matrix.matrix[i][j] = A[i][j];
@@ -76,7 +77,7 @@ Matrix findInv(double **A, unsigned n, MatActs *acts) {
         matrix.matrix[i][i+n] = 1;
     }
 
-    normiseMatrix(matrix.matrix, n, 2*n, &matrix.acts);
+    //norm = normiseMatrix(matrix.matrix, n, 2*n, &matrix.acts);
     if (findMatRank(A, n, n, acts) != n) {
         for (unsigned i = 0; i < n; i++) {
             free(matrix.matrix[i]);
@@ -88,7 +89,7 @@ Matrix findInv(double **A, unsigned n, MatActs *acts) {
     rungByGauss(matrix.matrix, n, 2*n);
     rungByantiGauss(matrix.matrix, n, 2*n);
 
-    multiplyMatrix(matrix.matrix, n, 2*n, matrix.acts.norm, &matrix.acts);
+    //multiplyMatrix(matrix.matrix, n, 2*n, norm, &matrix.acts);
 
     for (unsigned i = 0; i < n; i++) {
         multiplyRow(matrix.matrix, i, 1/matrix.matrix[i][i], 2*n, &matrix.acts);

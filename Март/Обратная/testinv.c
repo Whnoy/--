@@ -28,18 +28,19 @@ int testCorrect(FILE *output) {
         }
 
         fscanf(file, "%lf", &ans);
-
-        normiseMatrix(matrix.matrix, matrix.rows, matrix.cols, &matrix.acts);
         
         invMat = findInv(matrix.matrix, matrix.rows, &matrix.acts);
 
         drawMatrix(invMat.matrix, matrix.rows, matrix.cols, output);
+        fprintf(output, "\n");
 
         fclose(file);
         for (int j = 0; j < matrix.rows; j++) {
             free(matrix.matrix[j]);
+            free(invMat.matrix[j]);
         }
         free(matrix.matrix);
+        free(invMat.matrix);
     }
     return 5;
 }

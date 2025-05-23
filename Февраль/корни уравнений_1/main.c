@@ -13,6 +13,11 @@ int main(void) {
     printf("введите точность:");
     scanf("%lf", &eps);
 
+    if (eps <= 0) {
+        printf("Точность должна быть положительной!\n");
+        return 1;
+    }
+
     res = slov1(sin, a, b, eps, &ans);
 
     printf("Деление пополам:\n За %d итераций найден корень: %lf\n", res, ans);

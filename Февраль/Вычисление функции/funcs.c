@@ -3,7 +3,7 @@
 
 long double expcalc(double x, double eps) {
     long double result = 0;
-    double term = 1;
+    long double term = 1; // вместо double term = 1;
 
     for (unsigned long long i = 0;; i++) {
         result += term;
@@ -56,8 +56,10 @@ long double lncalc(double x, double eps) {
     unsigned long k = 1;
 
     while (fabsl(term) >= eps) {
-        term = 2 * powl(y, 2 * k + 1) / (2 * k + 1);
-        result += term;
+        term *= y2;
+        long double add = 2 * term / (2 * k + 1);
+        result += add;
+        if (fabsl(add) < eps) break;
         k++;
     }
 

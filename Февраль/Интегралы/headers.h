@@ -1,3 +1,6 @@
+#ifndef INTEGRALS_H
+#define INTEGRALS_H
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,3 +32,5 @@ unsigned slov3(double (*func)(double x), double a, double b, double eps, double 
 
 //Метод Гаусса
 unsigned slov4(double (*func)(double x), double a, double b, double eps, double *ans);
+
+#endif // INTEGRALS_H

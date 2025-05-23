@@ -81,7 +81,7 @@ int _findRowMax(double **A, int n, int m, int row);
 int _findRowAntiMax(double **A, int n, int m, int row);
 
 /// Function to normalize the matrix
-void normiseMatrix(double **A, unsigned n, unsigned m, MatActs *acts);
+double normiseMatrix(double **A, unsigned n, unsigned m, MatActs *acts);
 
 
 

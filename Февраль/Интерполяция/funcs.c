@@ -20,7 +20,7 @@ double *Lagrange(double *pointsKn, size_t n, double *pointsUnk, size_t m) {
             }
             dif = pointsKn[j1+1];
             for (size_t j2 = 0; j2 < n; j2 += 2) {
-                if (j1 == j2) {continue;}
+                if (j1 == j2 || fabs(pointsKn[j1] - pointsKn[j2]) < 1e-12) {continue;}
                 dif *= (*x - pointsKn[j2]) / (pointsKn[j1] - pointsKn[j2]);
             }
             *y += dif;
@@ -79,7 +79,7 @@ double *Hermite(double *pointsKn, size_t n, double *pointsUnk, size_t m) {
             }
             dif = pointsKn[j1+1];
             for (size_t j2 = 0; j2 < n; j2 += 2) {
-                if (j1 == j2) {continue;}
+                if (j1 == j2 || fabs(pointsKn[j1] - pointsKn[j2]) < 1e-12) {continue;}
                 dif *= (*x - pointsKn[j2]) / (pointsKn[j1] - pointsKn[j2]);
             }
             *y += dif;
@@ -108,7 +108,7 @@ double *Quadratic(double *pointsKn, size_t n, double *pointsUnk, size_t m) {
             }
             dif = pointsKn[j1+1];
             for (size_t j2 = 0; j2 < n; j2 += 2) {
-                if (j1 == j2) {continue;}
+                if (j1 == j2 || fabs(pointsKn[j1] - pointsKn[j2]) < 1e-12) {continue;}
                 dif *= (*x - pointsKn[j2]) / (pointsKn[j1] - pointsKn[j2]);
             }
             *y += dif;

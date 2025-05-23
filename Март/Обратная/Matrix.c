@@ -209,7 +209,7 @@ int _findRowAntiMax(double **A, int n, int m, int row) {
     return maxRow;
 }
 
-void normiseMatrix(double **A, unsigned n, unsigned m, MatActs *acts) {
+double normiseMatrix(double **A, unsigned n, unsigned m, MatActs *acts) {
     double max = 0, maxNew = 0;
     for (unsigned j = 0; j < m; j++) {
         max += fabs(A[0][j]);
@@ -225,6 +225,8 @@ void normiseMatrix(double **A, unsigned n, unsigned m, MatActs *acts) {
     }
 
     multiplyMatrix(A, n, m, 1 / max, acts);
+    acts->norm = max;
+    return max;
 }
 
 
