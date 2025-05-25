@@ -6,5 +6,7 @@ int main(void) {
     test(sloveSimle);
     printf("Метод скоренного спуска:\n");
     test(sloveFast);
+    printf("Метод Зейделя:\n");
+    test(sloveYeban);
     return 0;
 }

@@ -75,6 +75,8 @@ double scalcMult(Matrix A, Matrix B) {
     return sum;
 }
 
+
+//Метод простой итерации
 double *sloveSimle(Matrix A, double *fr, double eps) {
     int i = 0;
     int n = A.rows;
@@ -154,6 +156,7 @@ double *sloveSimle(Matrix A, double *fr, double eps) {
     return ans;
 }
 
+// Метод скорейшего спуска
 double *sloveFast(Matrix A, double *fr, double eps) {
     int i = 0;
     int n = A.rows;
@@ -233,81 +236,54 @@ double *sloveFast(Matrix A, double *fr, double eps) {
     return ans;
 }
 
+// Метод Зейделя
 double *sloveYeban(Matrix A, double *fr, double eps) {
-    int i = 0;
     int n = A.rows;
-    Matrix B;
-    Matrix X1;
-    Matrix X2;
+    double *x = (double *)malloc(n * sizeof(double));
+    double *x_prev = (double *)malloc(n * sizeof(double));
+    if (!x || !x_prev) return NULL;
 
-    Matrix Y;
-    Matrix Z;
-    Matrix id;
-    Matrix tmp;
-
-    double *minax = findMinMax(A); 
-    double diff = 0;
-
-    double *ans;
-
-    if (minax[0] < 0) {
-        return NULL;
-    }
-
-    Z = createCol(n, NULL);
-    Y = createCol(n, NULL);
-    X2 = createCol(n, NULL);
-    X1 = createCol(n, NULL);
-    id = createCol(n, NULL);
-    B = createCol(n, fr);
-    tmp = createCol(n, NULL);
-    ans = (double *)malloc(n * sizeof(double));
-
-    int br;
-
-
+    // Начальное приближение
     for (int i = 0; i < n; i++) {
-        X1.matrix[i][0] = 0; 
-        X2.matrix[i][0] = 0;
-        Y.matrix[i][0] = 0;
-        Z.matrix[i][0] = 0;
-        id.matrix[i][0] = 1;
+        x[i] = 0;
+        x_prev[i] = 0;
     }
+
+    int max_iter = 100000;
+    int iter = 0;
+    double norm;
 
     do {
-        multMatrix(A.matrix, n, n, X1.matrix, n, 1, &Y);
-        subMatrix(Y.matrix, n, 1, B.matrix, n, 1, &Z);
-        
-        br = isTTS(Z, eps);
+        for (int i = 0; i < n; i++) {
+            double sum = 0;
+            for (int j = 0; j < n; j++) {
+                if (j != i) {
+                    sum += A.matrix[i][j] * x[j];
+                }
+            }
+            x[i] = (fr[i] - sum) / A.matrix[i][i];
+        }
 
-        multMatrix(A.matrix, n, n, Z.matrix, n, 1, &tmp);
+        // Вычисляем норму разности
+        norm = 0;
+        for (int i = 0; i < n; i++) {
+            norm += (x[i] - x_prev[i]) * (x[i] - x_prev[i]);
+        }
+        norm = sqrt(norm);
 
-        diff = scalcMult(Z, Z)/scalcMult(tmp, Z);
+        // Копируем x в x_prev для следующей итерации
+        for (int i = 0; i < n; i++) {
+            x_prev[i] = x[i];
+        }
 
-        multiplyMatrix(Z.matrix, n, 1, diff, &(Z.acts));
+        iter++;
+        if (iter > max_iter) {
+            free(x);
+            free(x_prev);
+            return NULL; // не сошлось
+        }
+    } while (norm > eps);
 
-        subMatrix(X1.matrix, n, 1, Z.matrix, n, 1, &X2);
-
-        subMatrix(X2.matrix, n, 1, id.matrix, n, 1, &Z);
-        subMatrix(X1.matrix, n, 1, id.matrix, n, 1, &Y);
-
-        
-        copyMatrix(X2, &X1);
-
-
-    } while (br == 0);
-
-
-    for (int i = 0; i < n; i++) {
-        ans[i] = X1.matrix[i][0];
-    }
-
-    freeSMatrix(B);
-    freeSMatrix(X1);
-    freeSMatrix(X2);
-    freeSMatrix(Y);
-    freeSMatrix(Z);
-    free(minax);
-
-    return ans;
+    free(x_prev);
+    return x;
 }

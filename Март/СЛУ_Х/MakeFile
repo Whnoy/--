@@ -1,0 +1,5 @@
+all: create
+
+create:
+	@echo "Creating directory structure..."
+	gcc main.c funcs.c Matrix.c solution.c test.c -o slex.out

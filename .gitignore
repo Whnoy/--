@@ -1,0 +1,11 @@
+*.out
+*.exe
+*.dSYM
+
+*.o
+*.a
+*.lib
+
+.DS_Store
+.vscode/
+*~
