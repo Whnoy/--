@@ -13,12 +13,14 @@ char *getWord(FILE *input) {
     word[size]= '\0';
     return word;
 }
+
 int isNum(char *word) {
     for (int i = 0; word[i] != '\0'; i++) {
         if (word[i] > '9' && word[i] < '0') {return 0;}
     }
     return 1;
 }
+
 int isWord(char *word) {
     for (int i = 0; word[i] != '\0'; i++) {
         if (!(word[i] >= 'A' && word[i] <= 'z')) {return 0;}
