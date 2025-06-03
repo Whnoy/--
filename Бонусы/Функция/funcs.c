@@ -9,7 +9,33 @@ double flower(double x, double y) {
     return pow(SQR(x) + SQR(y), 2) - SQR(x) + SQR(y) - 2; 
 }
 
+// Новый вспомогательный поиск начальной точки
+void find_initial_point(double (*func)(double, double), double *x0, double *y0) {
+    double x, y;
+    const double search_min = -2.0, search_max = 2.0, search_step = 0.05;
+    const double eps = 1e-6;
+    for (x = search_min; x <= search_max; x += search_step) {
+        for (y = search_min; y <= search_max; y += search_step) {
+            if (fabs(func(x, y)) < eps) {
+                *x0 = x;
+                *y0 = y;
+                return;
+            }
+        }
+    }
+    // Если не нашли — по умолчанию (0,0)
+    *x0 = 0.0;
+    *y0 = 0.0;
+}
+
+// Изменяем findPoints: если x0 и y0 равны NAN, ищем автоматически
+#include <float.h> // для isnan
+#include <math.h>
+
 Node *findPoints(double (*func)(double, double), double x0, double y0) {
+    if (isnan(x0) || isnan(y0)) {
+        find_initial_point(func, &x0, &y0);
+    }
     // Все объявления переменных в начале функции
     const double eps = 1e-12, step = 1e-6, grad_eps = 1e-8;
     int max_iter = 10000000, iter = 0;

@@ -14,9 +14,11 @@ typedef struct Node{
 double cyrcle(double x, double y);
 double flower(double x, double y);
 
+void find_initial_point(double (*func)(double, double), double *x0, double *y0);
+
 Node *findPoints(double (*func)(double, double), double x, double y);
 
-double findLength(Node *head);   // исправлено: принимает указатель
-double findArea(Node *head);     // исправлено: принимает указатель
+double findLength(Node *head);
+double findArea(Node *head);
 
 #endif // HNF_H
