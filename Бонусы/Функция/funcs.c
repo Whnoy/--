@@ -9,7 +9,10 @@ double flower(double x, double y) {
     return pow(SQR(x) + SQR(y), 2) - SQR(x) + SQR(y) - 2; 
 }
 
-// Новый вспомогательный поиск начальной точки
+double example(double x,  double y) {
+    return (x + SQR(x)*x*y + SQR(x) + x*SQR(y) + SQR(SQR(x))*y + 0.3);
+}
+
 void find_initial_point(double (*func)(double, double), double *x0, double *y0) {
     double x, y;
     const double search_min = -2.0, search_max = 2.0, search_step = 0.05;
@@ -23,20 +26,11 @@ void find_initial_point(double (*func)(double, double), double *x0, double *y0) 
             }
         }
     }
-    // Если не нашли — по умолчанию (0,0)
     *x0 = 0.0;
     *y0 = 0.0;
 }
 
-// Изменяем findPoints: если x0 и y0 равны NAN, ищем автоматически
-#include <float.h> // для isnan
-#include <math.h>
-
-Node *findPoints(double (*func)(double, double), double x0, double y0) {
-    if (isnan(x0) || isnan(y0)) {
-        find_initial_point(func, &x0, &y0);
-    }
-    // Все объявления переменных в начале функции
+Node *findPoints(double (*func)(double, double), double x0, double y0, double xmin, double xmax, double ymin, double ymax) {
     const double eps = 1e-12, step = 1e-6, grad_eps = 1e-8;
     int max_iter = 10000000, iter = 0;
     int min_steps = 0, inner_iter = 0, max_inner = 0;
@@ -47,6 +41,9 @@ Node *findPoints(double (*func)(double, double), double x0, double y0) {
     double x_next = 0.0, y_next = 0.0, dx = 0.0, dy = 0.0, dist = 0.0, grad_norm = 0.0;
     double fx0 = 0.0, fy0 = 0.0, tx0 = 0.0, ty0 = 0.0, norm0 = 0.0;
     double fx_cur = 0.0, fy_cur = 0.0, tx_cur = 0.0, ty_cur = 0.0, norm_cur = 0.0, dot = 0.0;
+    if (isnan(x0) || isnan(y0)) {
+        find_initial_point(func, &x0, &y0);
+    }
 
     head = malloc(sizeof(Node));
     if (!head) exit(EXIT_FAILURE);
@@ -111,23 +108,8 @@ Node *findPoints(double (*func)(double, double), double x0, double y0) {
             nuff = func(x_next, y_next);
         }
 
-        if (iter > min_steps) {
-            dx = x_next - x_start;
-            dy = y_next - y_start;
-            dist = sqrt(dx*dx + dy*dy);
-
-            // Касательная в текущей точке
-            fx_cur = (func(x_next + grad_eps, y_next) - func(x_next - grad_eps, y_next)) / (2 * grad_eps);
-            fy_cur = (func(x_next, y_next + grad_eps) - func(x_next, y_next - grad_eps)) / (2 * grad_eps);
-            tx_cur = -fy_cur; ty_cur = fx_cur;
-            norm_cur = sqrt(tx_cur * tx_cur + ty_cur * ty_cur);
-            if (norm_cur > 1e-12) {
-                tx_cur /= norm_cur; ty_cur /= norm_cur;
-            }
-            dot = tx_cur * tx0 + ty_cur * ty0;
-
-            if (dist < step && dot > 0.99) // угол между касательными < ~8°
-                break;
+        if (x_next > xmax || x_next < xmin || y_next > ymax || y_next < ymin) {
+            break;
         }
 
         next = malloc(sizeof(Node));
@@ -136,14 +118,6 @@ Node *findPoints(double (*func)(double, double), double x0, double y0) {
         buff->next = next;
         buff = next;
     } while (++iter < max_iter);
-
-    // Явно замыкаем ломаную
-    next = malloc(sizeof(Node));
-    if (!next) exit(EXIT_FAILURE);
-    next->x = x_start;
-    next->y = y_start;
-    next->next = NULL;
-    buff->next = next;
 
     return head;
 }

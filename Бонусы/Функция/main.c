@@ -13,7 +13,7 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    points = findPoints(cyrcle, x0, y0);
+    points = findPoints(example, x0, y0);
 
     a = findArea(points);
     l = findLength(points);
